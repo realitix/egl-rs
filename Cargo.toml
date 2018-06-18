@@ -1,0 +1,10 @@
+[package]
+name = "egl-rs"
+version = "0.1.0"
+authors = ["Bevilacqua Jean-Sebastien <realitix@gmail.com>"]
+
+[lib]
+name = "eglrs"
+
+[build-dependencies]
+bindgen = "*"
