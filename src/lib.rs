@@ -110,3 +110,7 @@ pub fn create_context(
 ) -> Context {
     unsafe { sys::eglCreateContext(display, config, share_context, attrib_list[..].as_ptr()) }
 }
+
+pub fn make_current(display: Display, draw: Surface, read: Surface, context: Context) {
+    unsafe { sys::eglMakeCurrent(display, draw, read, context) };
+}
