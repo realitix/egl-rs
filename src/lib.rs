@@ -17,16 +17,19 @@ pub type Int = sys::EGLint;
 pub type NativeWindowType = sys::NativeWindowType;
 pub type Config = sys::EGLConfig;
 pub type Surface = sys::EGLSurface;
+pub type Context = sys::EGLContext;
 
 // Constant
-pub static SURFACE_TYPE: Int = sys::EGL_SURFACE_TYPE as Int;
-pub static WINDOW_BIT: Int = sys::EGL_WINDOW_BIT as Int;
-pub static RENDERABLE_TYPE: Int = sys::EGL_RENDERABLE_TYPE as Int;
-pub static OPENGL_ES2_BIT: Int = sys::EGL_OPENGL_ES2_BIT as Int;
-pub static RED_SIZE: Int = sys::EGL_RED_SIZE as Int;
-pub static GREEN_SIZE: Int = sys::EGL_GREEN_SIZE as Int;
-pub static BLUE_SIZE: Int = sys::EGL_BLUE_SIZE as Int;
-pub static NONE: Int = sys::EGL_NONE as Int;
+pub const SURFACE_TYPE: Int = sys::EGL_SURFACE_TYPE as Int;
+pub const WINDOW_BIT: Int = sys::EGL_WINDOW_BIT as Int;
+pub const RENDERABLE_TYPE: Int = sys::EGL_RENDERABLE_TYPE as Int;
+pub const OPENGL_ES2_BIT: Int = sys::EGL_OPENGL_ES2_BIT as Int;
+pub const RED_SIZE: Int = sys::EGL_RED_SIZE as Int;
+pub const GREEN_SIZE: Int = sys::EGL_GREEN_SIZE as Int;
+pub const BLUE_SIZE: Int = sys::EGL_BLUE_SIZE as Int;
+pub const NONE: Int = sys::EGL_NONE as Int;
+pub const NO_CONTEXT: Context = sys::EGL_NO_CONTEXT as Context;
+pub const CONTEXT_CLIENT_VERSION: Int = sys::EGL_CONTEXT_CLIENT_VERSION as Int;
 
 // Rust wrapper
 pub fn get_display(native_display: *mut c_void) -> Display {
@@ -94,12 +97,16 @@ pub fn create_window_surface(
     display: Display,
     config: Config,
     native_window: NativeWindowType,
-    attrib_list: Option<Vec<Int>>,
+    attrib_list: Vec<Int>,
 ) -> Surface {
-    let attr = match attrib_list {
-        Some(x) => x,
-        None => vec![NONE],
-    };
+    unsafe { sys::eglCreateWindowSurface(display, config, native_window, attrib_list[..].as_ptr()) }
+}
 
-    unsafe { sys::eglCreateWindowSurface(display, config, native_window, attr[..].as_ptr()) }
+pub fn create_context(
+    display: Display,
+    config: Config,
+    share_context: Context,
+    attrib_list: Vec<Int>,
+) -> Context {
+    unsafe { sys::eglCreateContext(display, config, share_context, attrib_list[..].as_ptr()) }
 }
