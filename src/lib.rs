@@ -30,6 +30,7 @@ pub const BLUE_SIZE: Int = sys::EGL_BLUE_SIZE as Int;
 pub const NONE: Int = sys::EGL_NONE as Int;
 pub const NO_CONTEXT: Context = sys::EGL_NO_CONTEXT as Context;
 pub const CONTEXT_CLIENT_VERSION: Int = sys::EGL_CONTEXT_CLIENT_VERSION as Int;
+pub const NO_SURFACE: Surface = sys::EGL_NO_SURFACE as Surface;
 
 // Rust wrapper
 pub fn get_display(native_display: *mut c_void) -> Display {
@@ -113,4 +114,8 @@ pub fn create_context(
 
 pub fn make_current(display: Display, draw: Surface, read: Surface, context: Context) {
     unsafe { sys::eglMakeCurrent(display, draw, read, context) };
+}
+
+pub fn swap_buffers(display: Display, surface: Surface) {
+    unsafe { sys::eglSwapBuffers(display, surface) };
 }
